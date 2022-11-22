@@ -4,19 +4,43 @@ import cv2 as cv
 def nothing(x):
     pass
 
-cv.namedWindow('binary_frame')
+#create trackbar windows
+cv.namedWindow('Hue', cv.WINDOW_NORMAL)
+cv.namedWindow('Saturation', cv.WINDOW_NORMAL)
+cv.namedWindow('Value', cv.WINDOW_NORMAL)
 
-#hue max and min trackbars
-cv.createTrackbar('high_H', 'binary_frame', 0, 255, nothing)
-#cv.createTrackbar('low_H', 'binary_frame', 0, 255, nothing)
+#resize trackbar windows
+cv.resizeWindow('Hue', 1250, 30)
+cv.resizeWindow('Saturation', 1250, 30)
+cv.resizeWindow('Value', 1250, 30)
 
-#cv.setTrackbarPos('low_H', 'binary_frame', 45)
-#cv.setTrackbarPos('high_H', 'binary_frame', 105)
+
+# create trackbars
+cv.createTrackbar('low_H', 'Hue', 0, 255, nothing)
+cv.createTrackbar('high_H', 'Hue', 0, 255, nothing)
+
+cv.createTrackbar('low_S', 'Saturation', 0, 255, nothing)
+cv.createTrackbar('high_S', 'Saturation', 0, 255, nothing)
+
+cv.createTrackbar('low_V', 'Value', 0, 255, nothing)
+cv.createTrackbar('high_V', 'Value', 0, 255, nothing)
+
+
+#set trackbar number for hue max and mins
+cv.setTrackbarPos('high_H', 'Hue', 105)
+cv.setTrackbarPos('low_H', 'Hue', 25)
+#set trackbar number for saturation max and mins
+cv.setTrackbarPos('high_S', 'Saturation', 255)
+cv.setTrackbarPos('low_S', 'Saturation', 80)
+#set trackbar number for value max and mins
+cv.setTrackbarPos('high_V', 'Value', 255)
+cv.setTrackbarPos('low_V', 'Value', 80)
+
 
 #capture video
 capture = cv.VideoCapture(0)
 
-#if camera couldn't be opened,exit
+#if camera couldn't be opened, exit
 if not capture.isOpened():
     print("Can't open camera")
     exit()
@@ -30,24 +54,40 @@ while True:
         print ("Can't get frame")
         break
 
-    #assign trackbar position to min max hue
-    #lowH = cv.getTrackbarPos('low_H', 'binary_frame')
-    highH = cv.getTrackbarPos('high_H', 'binary_frame')
-
     #frame RGB to HSV
     hsv_frame = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
 
+    lowH = cv.getTrackbarPos('low_H', 'Hue')
+    highH = cv.getTrackbarPos('high_H', 'Hue')
+    #assign trackbar position to min max saturation
+    lowS = cv.getTrackbarPos('low_S', 'Saturation')
+    highS = cv.getTrackbarPos('high_S', 'Saturation')
+    #assign trackbar position to min max value
+    lowV = cv.getTrackbarPos('low_V', 'Value')
+    highV = cv.getTrackbarPos('high_V', 'Value')
+
     #frame HSV to binary og (45, 100, 100) (105, 255, 255)
-    binary_frame = cv.inRange(hsv_frame, (45, 100, 100), (105, 255, 255))
+    binary_frame = cv.inRange(hsv_frame, (25, lowS, lowV), (105, highS, highV))
 
     #display frame
     cv.imshow('binary_frame', binary_frame)
     cv.imshow('frame', frame)
 
-
     # if q (quit) pressed, break
     if cv.waitKey(1) == ord('q'):
         break
+
+    #if r pressed, reset trackbars
+    if cv.waitKey(1) == ord('r'):
+        #set trackbar number for saturation max and mins
+        cv.setTrackbarPos('high_H', 'Hue', 105)
+        cv.setTrackbarPos('low_H', 'Hue', 25)
+        #set trackbar number for saturation max and mins
+        cv.setTrackbarPos('high_S', 'Saturation', 255)
+        cv.setTrackbarPos('low_S', 'Saturation', 80)
+        #set trackbar number for value max and mins
+        cv.setTrackbarPos('high_V', 'Value', 255)
+        cv.setTrackbarPos('low_V', 'Value', 80)
 
 capture.release()
 cv.destroyAllWindows()
