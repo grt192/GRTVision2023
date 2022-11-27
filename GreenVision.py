@@ -27,7 +27,7 @@ cv.createTrackbar('high_V', 'Value', 0, 255, nothing)
 
 
 #set trackbar number for hue max and mins
-cv.setTrackbarPos('high_H', 'Hue', 105)
+cv.setTrackbarPos('high_H', 'Hue', 95)
 cv.setTrackbarPos('low_H', 'Hue', 25)
 #set trackbar number for saturation max and mins
 cv.setTrackbarPos('high_S', 'Saturation', 255)
@@ -49,6 +49,8 @@ while True:
     #capture vid frame by frame
     ret, frame = capture.read()
 
+    contour_img = np.copy(frame)
+
     #if frame is not read correctly, break
     if not ret:
         print ("Can't get frame")
@@ -67,11 +69,21 @@ while True:
     highV = cv.getTrackbarPos('high_V', 'Value')
 
     #frame HSV to binary og (45, 100, 100) (105, 255, 255)
-    binary_frame = cv.inRange(hsv_frame, (25, lowS, lowV), (105, highS, highV))
+    binary_frame = cv.inRange(hsv_frame, (lowH, lowS, lowV), (highH, highS, highV))
+
+    #find contours of binary img
+    contour_list, hierarchy = cv.findContours(binary_frame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+
+    #if contour is too small, ignore
+    for contour in contour_list:
+        if cv.contourArea(contour) < 25:
+            continue
+        #draw contours
+        cv.drawContours(contour_img, contour, -1, color = (255, 255, 255), thickness = -3 )
 
     #display frame
     cv.imshow('binary_frame', binary_frame)
-    cv.imshow('frame', frame)
+    cv.imshow('contour_frame', contour_img)
 
     # if q (quit) pressed, break
     if cv.waitKey(1) == ord('q'):
@@ -80,7 +92,7 @@ while True:
     #if r pressed, reset trackbars
     if cv.waitKey(1) == ord('r'):
         #set trackbar number for saturation max and mins
-        cv.setTrackbarPos('high_H', 'Hue', 105)
+        cv.setTrackbarPos('high_H', 'Hue', 95)
         cv.setTrackbarPos('low_H', 'Hue', 25)
         #set trackbar number for saturation max and mins
         cv.setTrackbarPos('high_S', 'Saturation', 255)
