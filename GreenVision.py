@@ -74,15 +74,26 @@ while True:
     #find contours of binary img
     contour_list, hierarchy = cv.findContours(binary_frame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
-    #if contour is too small, ignore
-    for contour in contour_list:
-        if cv.contourArea(contour) < 25:
-            continue
-        #draw contours
-        cv.drawContours(contour_img, contour, -1, color = (255, 255, 255), thickness = -3 )
+    if len(contour_list) > 0:
+        largest = contour_list[0]
+        for contour in contour_list:
+            if cv.contourArea(contour) > cv.contourArea(largest):
+                largest = contour
+            #draw contours
+    #find minimum area rectangle
+    rect = cv.minAreaRect(largest)
+    #find 4 corners of rectangle
+    box = cv.boxPoints(rect)
+    #convert to int
+    box = np.int0(box)
+    #draw contour
+    cv.drawContours(contour_img, [box], 0, color = (0, 0, 255), thickness = 2 )
+    #draw rectangle around contour
+    cv.drawContours(contour_img, largest, -1, color = (255, 255, 255), thickness = -3 )
+
+    
 
     #display frame
-    cv.imshow('binary_frame', binary_frame)
     cv.imshow('contour_frame', contour_img)
 
     # if q (quit) pressed, break
