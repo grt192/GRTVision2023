@@ -7,5 +7,5 @@ class AprilTags:
     def __init__(self):
         return
 
-    def detect(self, image):
+    def get(self, image):
         return

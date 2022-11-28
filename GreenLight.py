@@ -7,5 +7,5 @@ class GreenLight:
     def __init__(self):
         return
     
-    def predict(self, image):
+    def get(self, image):
         return

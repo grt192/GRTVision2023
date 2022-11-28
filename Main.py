@@ -12,16 +12,31 @@ import Source
 class Main:
     def __init__(self):
         self.green = GreenLight()
+        self.april = AprilTags()
         self.localizer = Localization()
+
+        self.pipelines = [self.green, self.localizer]
 
         # example source
         self.turretcam = Source(0,    0, 0 ,1,   0, 0, 0)
         # port 0
         # raised by 1 unit (feet probably?)
         # pointed straight forward
+
+        self.sources = [self.turretcam]
         
     
     def run(self):
-        turretprediction = self.green.detect(self.turretcam.get_frame())
-        location = self.localizer([turretprediction, self.turretcam])
+        
+        greenlights = []
+        apriltags = []
+
+        for source in self.sources:
+            img = source.get_frame()
+            greenlights.append((source, self.green.get(img)))
+            apriltags.append((source, self.april.get(img)))
+            
+
+
+        location = self.localizer.localize(greenlights, apriltags)
         return location

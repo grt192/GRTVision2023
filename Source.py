@@ -12,6 +12,9 @@ class Source:
         # relative position and angle to robot origin
         self.pos = (x, y, z)
         self.angle = (a, b, c)
+        
+        # estimated global position
+        self.globalpos = (0,0,0)
     
     def get_frame(self):
 
