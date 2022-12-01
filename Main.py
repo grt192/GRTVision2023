@@ -1,4 +1,4 @@
-from AprilTags import AprilTags
+import apriltags.AprilTags as AprilTags
 from GreenLight import GreenLight
 from Localization import Localization
 from Source import Source
