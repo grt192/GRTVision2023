@@ -26,4 +26,4 @@ class CameraSource:
 
         # RESIZE IMAGE PIPE
 
-        # return image
+        return self.frame # TODO fix
