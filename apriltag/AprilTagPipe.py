@@ -1,11 +1,4 @@
-# takes in images 
-# returns position estimates in array form
-# [ (tagid, prediction), (tagid, prediction)...]
-# ex: [ (21, 0, 1.5, 1), (12, 1, 2.5, 1) ]
-
 from pupil_apriltags import Detector
-from ../pipelines.GrayscalePipe import GrayscalePipe
-
 
 # lower resolution tag family Tag16h5 
 # teams should be able to detect the tags from further away for a given resolution and use a little less CPU doing so (or process at a higher frame rate)
@@ -14,7 +7,7 @@ from ../pipelines.GrayscalePipe import GrayscalePipe
 
 # tag PDF source: https://github.com/TylerSeiford/apriltag-pdfs
 
-class AprilTagPipeline:
+class AprilTagPipe:
 
 
     def __init__(self):
@@ -43,29 +36,13 @@ class AprilTagPipeline:
         # Default camera params [fx, fy, cx, cy]  
         self.CAMERA_PARAMS = (0, 0, 0, 0)
 
-        # Sub-pipelines
-        grayscalePipe = GrayscalePipe()
-
-        
+    
+    # Receives gray image, returns detections
     def get(self, image):
-        # The image must be a grayscale image of type numpy.uint8.
+        # Run tag detection
+        detections = self.detector.detect(gray_image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
 
-        # GRAYSCALE PIPE
-        grayscalePipe.process(image)
-
-        detections = self.detector.detect(image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
-
-        output = []
-        for d in detections:
-            output.append((d.tag_id, d.pose_R, d.pose_t))
-        
-        ///
-        result = [1.0, self.finder_id, ]
-        result.extend(self.compute_output_values(rvec, tvec))
-        self.target_found = True
-        return result
-        ///
-        return # tag information/pose, new image
+        return detections
 
 
     # Re-initializes detector with parameters as defined by class variables
