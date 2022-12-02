@@ -18,7 +18,7 @@ class AprilTagPipe:
         self.TAG_FAMILY = 'tag16h5'
         self.N_THREADS = 1
         self.DECIMATE = 1.0
-        self.SIGMA_BLUR = 0.0
+        self.SIGMA_BLUR = 0.8
         self.REFINE_EDGES = 1
         self.DECODE_SHARPENING = 0.25
         self.DEBUG = 0
@@ -40,7 +40,7 @@ class AprilTagPipe:
     # Receives gray image, returns detections
     def get(self, image):
         # Run tag detection
-        detections = self.detector.detect(gray_image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
+        detections = self.detector.detect(image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
 
         return detections
 

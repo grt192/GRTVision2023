@@ -47,7 +47,7 @@ def quatToAxisAngle(q):
 
     return (theta, (x, y, z))
 
-def quatToFUL(q):
+def quatToFLU(q):
     x, y, z, w = q
     
     forward = (
@@ -56,16 +56,16 @@ def quatToFUL(q):
         1 - 2 * (x * x + y * y)
     )
 
-    up = (
-        2 * (x * y - w * z),
-        1 - 2 * (x * x + z * z),
-        2 * (y * z + w * x)
-    )
-
     left = (
         1 - 2 * (y * y + z * z),
         2 * (x * y + w * z),
         2 * (x * z - w * y)
     )
 
-    return (forward, up, left)
+    up = (
+        2 * (x * y - w * z),
+        1 - 2 * (x * x + z * z),
+        2 * (y * z + w * x)
+    )
+
+    return (forward, left, up)

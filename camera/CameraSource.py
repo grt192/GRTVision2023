@@ -20,7 +20,8 @@ class CameraSource:
         # Grab frame
         if self.cap is None or (not self.cap.isOpened()):
             self.cap = cv2.VideoCapture(self.params.path) # , cv2.CAP_V4L)
-        self.frame = self.cap.read()
+            
+        _, self.frame = self.cap.read()
 
         # CALIBRATE IMAGE PIPE
 
