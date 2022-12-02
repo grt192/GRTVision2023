@@ -3,7 +3,8 @@ from random import Random
 import time
 import zmq
 
-SERVER_IP = "tcp://*:5000"
+LOCAL_DEBUG = False
+SERVER_IP = "tcp://*:5000" if LOCAL_DEBUG else "tcp://10.1.92.94:5000"
 
 context = zmq.Context()
 
@@ -18,7 +19,7 @@ while True:
         "x": 12.12507 * random.random(),
         "y": 3.2394682 * random.random(),
         "z": 5.238 * random.random(),
-        "ts": time.time_ns() // 1000000  # Current time in ms
+        "ts": int(time.time() * 1000)  # Current time in ms
     }
 
     # Send JSON data to RIO
