@@ -3,13 +3,13 @@ from random import Random
 import time
 import zmq
 
-LOCAL_DEBUG = False
+LOCAL_DEBUG = True
 SERVER_IP = "tcp://*:5000" if LOCAL_DEBUG else "tcp://10.1.92.94:5000"
 
 context = zmq.Context()
 
-print(f"Connecting a PUB server to {SERVER_IP}")
-socket = context.socket(zmq.PUB)
+print(f"Connecting a ROUTER to {SERVER_IP}")
+socket = context.socket(zmq.ROUTER)
 socket.bind(SERVER_IP)
 
 random = Random()
@@ -25,6 +25,7 @@ while True:
     # Send JSON data to RIO
     message = json.dumps(data)
     print(f"Sending data: {message}")
+    socket.send_string("RIO", flags=zmq.Flag.SNDMORE)  # Prefix with RIO identity string
     socket.send_string(message)
 
     time.sleep(0.01)
