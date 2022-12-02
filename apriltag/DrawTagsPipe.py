@@ -2,9 +2,8 @@ import cv2
 
 class DrawTagsPipe:    
     
-    # Return grayscale image in uint8 format
     def process(self, image, detections):
-        output_image = cv2.copy(image)
+        output_image = image.copy()
 
         for d in detections:
             # Extract bounding box coordinates
@@ -25,7 +24,7 @@ class DrawTagsPipe:
             cv2.circle(output_image, (cX, cY), 5, (0, 0, 255), -1)
             
             # Draw the tag family on the image
-            cv2.putText(output_image, str(d.tag_family, 'id' + str(d.tag_id)), 
+            cv2.putText(output_image, d.tag_family.decode("utf-8") + 'id' + str(d.tag_id), 
                 (ptA[0], ptA[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         return output_image
