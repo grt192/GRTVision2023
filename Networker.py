@@ -6,6 +6,7 @@ from multiprocessing import Process, SimpleQueue
 
 LOCAL_DEBUG = True
 SERVER_IP = "tcp://*:5000" if LOCAL_DEBUG else "tcp://10.1.92.94:5000"
+RIO_IDENT = b"RIO"
 
 
 # A networker that sends and receives data from the RoboRIO over a ROUTER/DEALER socket.
@@ -17,19 +18,17 @@ def networker(data_queue: SimpleQueue):
     socket = context.socket(zmq.ROUTER)
     socket.bind(SERVER_IP)
 
-    rio_ident = b"RIO"
-
     while True:
         # Poll socket for inbound messages
         if socket.poll(0):
-            rio_ident = socket.recv()  # Store the identity payload in case the RIO has reconnected
+            socket.recv()  # Skip the identity frame
             print(f"Received: {socket.recv_string()}")
 
         # If there's data in the queue, send it to the RIO
         if not data_queue.empty():
             message = json.dumps(data_queue.get())
             print(f"Sending data: {message}")
-            socket.send(rio_ident, flags=zmq.SNDMORE)  # Prefix with RIO identity string
+            socket.send(RIO_IDENT, flags=zmq.SNDMORE)  # Prefix with RIO identity frame
             socket.send_string(message)
 
 
