@@ -3,7 +3,7 @@
 # outputs the relative position estimate of the green target from the camera as a tuple
 # ex: (0, 1.5, 1)
 
-class GreenLight:
+class GreenLightPipeline:
     def __init__(self):
         return
 
