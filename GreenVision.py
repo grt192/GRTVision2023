@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 
+
 def nothing(x):
     pass
 
@@ -38,7 +39,7 @@ cv.setTrackbarPos('low_V', 'Value', 80)
 
 
 #capture video
-capture = cv.VideoCapture(0)
+capture = cv.VideoCapture(1)
 
 #if camera couldn't be opened, exit
 if not capture.isOpened():
@@ -48,6 +49,8 @@ if not capture.isOpened():
 while True:
     #capture vid frame by frame
     ret, frame = capture.read()
+
+    capture.set(cv.CAP_PROP_EXPOSURE, -15)
 
     contour_img = np.copy(frame)
 
@@ -80,16 +83,20 @@ while True:
             if cv.contourArea(contour) > cv.contourArea(largest):
                 largest = contour
             #draw contours
-    #find minimum area rectangle
-    rect = cv.minAreaRect(largest)
-    #find 4 corners of rectangle
-    box = cv.boxPoints(rect)
-    #convert to int
-    box = np.int0(box)
-    #draw contour
-    cv.drawContours(contour_img, [box], 0, color = (0, 0, 255), thickness = 2 )
-    #draw rectangle around contour
-    cv.drawContours(contour_img, largest, -1, color = (255, 255, 255), thickness = -3 )
+        #find minimum area rectangle
+        rects = []
+        for contours in contour_list:
+            rect = cv.minAreaRect(contour)
+            #find 4 corners of rectangle
+            box = cv.boxPoints(rect)
+            #convert to int
+            box = np.int0(box)
+            rects.append(box)
+        #draw rectangles
+        cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
+        #draw contour
+        cv.drawContours(contour_img, contour_list, -1, color = (255, 255, 255), thickness = -1 )
+        print(rects)
 
     
 
