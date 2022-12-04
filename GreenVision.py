@@ -47,6 +47,7 @@ if not capture.isOpened():
     exit()
 
 while True:
+    rects = []
     #capture vid frame by frame
     ret, frame = capture.read()
 
@@ -78,25 +79,23 @@ while True:
     contour_list, hierarchy = cv.findContours(binary_frame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
     if len(contour_list) > 0:
-        largest = contour_list[0]
-        for contour in contour_list:
-            if cv.contourArea(contour) > cv.contourArea(largest):
-                largest = contour
-            #draw contours
         #find minimum area rectangle
-        rects = []
         for contours in contour_list:
-            rect = cv.minAreaRect(contour)
+            if cv.contourArea(contours) < 25:
+                continue
+            rect = cv.minAreaRect(contours)
             #find 4 corners of rectangle
             box = cv.boxPoints(rect)
             #convert to int
             box = np.int0(box)
             rects.append(box)
-        #draw rectangles
-        cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
-        #draw contour
-        cv.drawContours(contour_img, contour_list, -1, color = (255, 255, 255), thickness = -1 )
-        print(rects)
+            cv.drawContours(contour_img, contours, -1, color = (255, 255, 255), thickness = 1 )
+            print(rects)
+
+    
+    #draw rectangles
+    cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
+    #draw contour
 
     
 
