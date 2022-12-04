@@ -5,7 +5,7 @@ import zmq
 from multiprocessing import Process, SimpleQueue
 
 LOCAL_DEBUG = True
-SERVER_IP = "tcp://*:5000" if LOCAL_DEBUG else "tcp://10.1.92.94:5000"
+SERVER_IP = "tcp://*:5800" if LOCAL_DEBUG else "tcp://10.1.92.94:5800"
 RIO_IDENT = b"RIO"
 
 
@@ -27,7 +27,7 @@ def networker(data_queue: SimpleQueue):
         # If there's data in the queue, send it to the RIO
         if not data_queue.empty():
             message = json.dumps(data_queue.get())
-            print(f"Sending data: {message}")
+            # print(f"Sending data: {message}")
             socket.send(RIO_IDENT, flags=zmq.SNDMORE)  # Prefix with RIO identity frame
             socket.send_string(message)
 
