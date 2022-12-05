@@ -6,6 +6,6 @@
 class GreenLight:
     def __init__(self):
         return
-    
+
     def get(self, image):
         return
