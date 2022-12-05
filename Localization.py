@@ -6,8 +6,8 @@ class Localization:
         # need to have the positions of each april tag and their ids
         # need to have the positions of the target(s) (or just anything with the reflective green tape)
         return
-    
-    def localize(self, greenlights, apriltags): 
+
+    def localize(self, greenlights, apriltags):
         # greenlights will be an array of source objects (for camera positions) and their
         # corresponding tuples with predictions (also tuples?)
         # [ (source, (prediction) ), (source, (prediction) ]

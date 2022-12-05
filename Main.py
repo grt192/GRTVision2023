@@ -1,7 +1,8 @@
-import AprilTags
-import GreenLight
-import Localization
-import Source
+from AprilTags import AprilTags
+from GreenLight import GreenLight
+from Localization import Localization
+from Source import Source
+
 
 # takes in camera inputs
 # sends them to Greenlight and AprilTags
@@ -19,16 +20,15 @@ class Main:
         self.pipelines = [self.green, self.localizer]
 
         # example source
-        self.turretcam = Source(0,    0, 0 , 1,   0, 0, 0)
+        self.turretcam = Source(0, 0, 0, 1, 0, 0, 0)
         # port 0
         # raised by 1 unit (feet probably?)
         # pointed straight forward
 
         self.sources = [self.turretcam]
-        
-    
+
     def run(self):
-        
+
         data = dict()
 
         for i in range(len(self.sources)):
@@ -36,15 +36,13 @@ class Main:
             img = self.sources[i].get_frame()
             for pipeline in self.pipelines:
                 data[self.sources[i]][pipeline] = (pipeline.get(img))
-        
+
         greenlights = []
         apriltags = []
 
         for source in data:
             greenlights.append((source, data[source][self.green]))
             apriltags.append((source, data[source][self.april]))
-
-
 
         location = self.localizer.localize(greenlights, apriltags)
         return location
