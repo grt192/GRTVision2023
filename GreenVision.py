@@ -77,10 +77,13 @@ while True:
     contour_list, hierarchy = cv.findContours(binary_frame, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 
     if len(contour_list) > 0:
+        largest = contour_list[0]
         #find minimum area rectangle
-        for contours in contour_list:
+        for contours in contour_list:            
             if cv.contourArea(contours) < 25:
                 continue
+            if cv.contourArea(contours) > cv.contourArea(largest):
+                largest = contours
             rect = cv.minAreaRect(contours)
             #find 4 corners of rectangle
             box = cv.boxPoints(rect)
@@ -88,7 +91,8 @@ while True:
             box = np.int0(box)
             rects.append(box)
             cv.drawContours(contour_img, contours, -1, color = (255, 255, 255), thickness = 1 )
-            print(rects)
+            #print(rects)
+    print (largest[1][0])
     
     #draw rectangles
     cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
