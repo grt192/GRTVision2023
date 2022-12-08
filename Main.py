@@ -1,7 +1,7 @@
-import apriltags.AprilTags as AprilTags
-from GreenLight import GreenLight
+import pipelines.AprilTagPipeline as AprilTags
+from pipelines.GreenLightPipeline import GreenLight
 from Localization import Localization
-from Source import Source
+from camera.CameraSource import CameraSource
 
 
 # takes in camera inputs
@@ -20,7 +20,7 @@ class Main:
         self.pipelines = [self.green, self.localizer]
 
         # example source
-        self.turretcam = Source(0, 0, 0, 1, 0, 0, 0)
+        self.turretcam = CameraSource(0, 0, 0, 1, 0, 0, 0)
         # port 0
         # raised by 1 unit (feet probably?)
         # pointed straight forward

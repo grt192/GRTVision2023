@@ -1,7 +1,7 @@
 from apriltag.AprilTagPipe import AprilTagPipe
 from apriltag.DrawTagsPipe import DrawTagsPipe
-from pipe.GrayscalePipe import GrayscalePipe
-from camera.CameraSource import CameraSource
+from generic_pipelines.GrayscalePipe import GrayscalePipe
+from TestCameraSource import TestCameraSource
 from utils.MathUtils import matrixToQuat, quatToFLU
 
 import cv2
@@ -45,7 +45,7 @@ class AprilTagPipeline:
 
 if __name__ == '__main__':
     pipeline = AprilTagPipeline()
-    source = CameraSource('lifecamA_480p')
+    source = TestCameraSource('lifecamA_480p')
 
     # Configure april tag pipeline (TODO read from REQ config file)
     # TODO pipeline.setDetectionParams(...)

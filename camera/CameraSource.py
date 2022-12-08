@@ -6,10 +6,14 @@ from .CameraParams import CameraParams
 
 class CameraSource:
 
-    def __init__(self, filename):
+    def __init__(self, filename, x, y, z, a, b, c):
         # Initialize objects
         self.cap = None
         self.frame = None
+
+        # relative position and angle to robot origin
+        self.pos = (x, y, z)
+        self.angle = (a, b, c)
 
         # READ CONFIG FILE
         self.params = CameraParams(filename)
