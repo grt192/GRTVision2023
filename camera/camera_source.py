@@ -2,7 +2,8 @@
 # Retrieves images from USB camera according to specified config file.
 
 import cv2
-from .camera_params import CameraParams
+from camera_params import CameraParams
+
 
 class CameraSource:
 
@@ -17,18 +18,16 @@ class CameraSource:
 
         # READ CONFIG FILE
         self.params = CameraParams(filename)
-        
-    
-    def get_frame(self):
 
+    def get_frame(self):
         # Grab frame
         if self.cap is None or (not self.cap.isOpened()):
-            self.cap = cv2.VideoCapture(self.params.path) # , cv2.CAP_V4L)
-            
+            self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
+
         _, self.frame = self.cap.read()
 
         # CALIBRATE IMAGE PIPE
 
         # RESIZE IMAGE PIPE
 
-        return self.frame # TODO fix
+        return self.frame  # TODO fix

@@ -34,7 +34,7 @@ class CameraParams:
         print(data)
 
     # Return (fx, fy, cx, cy) 
-    def getParamsApril(self):
+    def get_params_april(self):
         return self.cam_matrix[0][0], self.cam_matrix[1][1], self.cam_matrix[0][2], self.cam_matrix[1][2]
 
         
