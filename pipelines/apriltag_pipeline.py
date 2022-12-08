@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
     # Configure april tag pipeline (TODO read from REQ config file)
     # TODO pipeline.setDetectionParams(...)
-    pipeline.aprilTagPipe.setCameraParams(source.params.getParamsApril())
+    pipeline.aprilTagPipe.setCameraParams(source.params.get_params_april())
 
     while True:
         # TODO: processing nanos, fps pipeline output
