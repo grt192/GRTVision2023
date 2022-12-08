@@ -1,3 +1,5 @@
+from multiprocessing import Process
+
 from apriltag.apriltag_pipe import AprilTagPipe
 from apriltag.draw_tags_pipe import DrawTagsPipe
 from generic_pipelines.grayscale_pipe import GrayscalePipe
@@ -7,28 +9,30 @@ from utils.math_utils import matrixToQuat, quatToFLU
 import cv2
 
 class AprilTagPipeline:
-    def __init__(self):
-        
+    def __init__(self, data_queue, stream_queue):
+        self.data_queue = data_queue
+        self.stream_queue = stream_queue
+
         # Sub-pipelines
-        self.grayscalePipe = GrayscalePipe()
-        self.aprilTagPipe = AprilTagPipe()
-        self.drawTagsPipe = DrawTagsPipe()
+        self.grayscale_pipe = GrayscalePipe()
+        self.apriltag_pipe = AprilTagPipe()
+        self.drawtags_pipe = DrawTagsPipe()
 
     # Output: image, data is tuple of BOOL (data exists or not) and DATA ARRAY
-    def run(self, image):
+    def process(self, image):
 
         if image is None:
             print('Pipeline: Received no image')
             return image, (False, [])
 
         # GRAYSCALE PIPE
-        gray_image = self.grayscalePipe.process(image)
+        gray_image = self.grayscale_pipe.process(image)
 
         # Run tag detection
-        detections = self.aprilTagPipe.process(gray_image)
+        detections = self.apriltag_pipe.process(gray_image)
 
         # DRAW TAGS PIPE
-        output_image = self.drawTagsPipe.process(gray_image, detections)
+        output_image = self.drawtags_pipe.process(gray_image, detections)
         
         if len(detections) == 0:
             output_data = (False, [])
@@ -40,7 +44,8 @@ class AprilTagPipeline:
                 output_t = (d.pose_t[0][0], d.pose_t[1][0], d.pose_t[2][0]) # unpack tvec array
                 output_data[1].append((d.tag_id, output_r, output_t))
 
-        return output_image, output_data
+        data_queue.put(output_data)
+        stream_queue.put(output_image)
 
 
 if __name__ == '__main__':

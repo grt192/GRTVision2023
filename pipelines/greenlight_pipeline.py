@@ -4,8 +4,10 @@
 # ex: (0, 1.5, 1)
 
 class GreenLightPipeline:
-    def __init__(self):
-        return
-
-    def get(self, image):
+    def __init__(self, data_queue, stream_queue):
+        self.data_queue = data_queue
+        self.stream_queue = stream_queue
+        
+        
+    def process(self, image):
         return

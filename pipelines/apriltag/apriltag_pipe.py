@@ -38,7 +38,7 @@ class AprilTagPipe:
 
     
     # Receives gray image, returns detections
-    def get(self, image):
+    def process(self, image):
         # Run tag detection
         detections = self.detector.detect(image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
 
