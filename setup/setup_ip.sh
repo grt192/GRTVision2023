@@ -1,7 +1,6 @@
 # Sets static IP of Jetson to 10.1.92.12
 # https://elinux.org/Jetson/FRC_Setup#Step_3:_Configuring_Jetpack_Networking
 
-sudo apt-get update 
 sudo apt-get install resolvconf
 
 # https://unix.stackexchange.com/a/384699
