@@ -9,27 +9,20 @@ SERVER_IP = "tcp://*:5800" if LOCAL_DEBUG else "tcp://10.1.92.94:5800"
 RIO_IDENT = b"RIO"
 
 
-# A networker that sends and receives data from the RoboRIO over a ROUTER/DEALER socket.
+# A networker that sends data to the RoboRIO over a PUB/SUB connection.
 # Data is queued to be sent via the `data_queue`, and is broadcast as fast as it arrives.
 def networker(data_queue: SimpleQueue):
     context = zmq.Context()
 
-    print(f"Connecting a ROUTER to {SERVER_IP}")
-    socket = context.socket(zmq.ROUTER)
+    print(f"Connecting a PUB server to {SERVER_IP}")
+    socket = context.socket(zmq.PUB)
     socket.bind(SERVER_IP)
 
+    # While the process is running, wait for messages in the queue and send them.
     while True:
-        # Poll socket for inbound messages
-        if socket.poll(0):
-            socket.recv()  # Skip the identity frame
-            print(f"Received: {socket.recv_string()}")
-
-        # If there's data in the queue, send it to the RIO
-        if not data_queue.empty():
-            message = json.dumps(data_queue.get())
-            # print(f"Sending data: {message}")
-            socket.send(RIO_IDENT, flags=zmq.SNDMORE)  # Prefix with RIO identity frame
-            socket.send_string(message)
+        message = json.dumps(data_queue.get())
+        # print(f"Sending data: {message}")
+        socket.send_string(message)
 
 
 if __name__ == '__main__':
