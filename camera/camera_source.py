@@ -2,7 +2,7 @@
 # Retrieves images from USB camera according to specified config file.
 
 import cv2
-from .CameraParams import CameraParams
+from .camera_params import CameraParams
 
 class CameraSource:
 

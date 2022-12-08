@@ -1,7 +1,7 @@
-import pipelines.AprilTagPipeline as AprilTags
-from pipelines.GreenLightPipeline import GreenLight
+import pipelines.apriltag_pipeline as AprilTags
+from pipelines.greenlight_pipeline import GreenLight
 from Localization import Localization
-from camera.CameraSource import CameraSource
+from camera.camera_source import CameraSource
 
 
 # takes in camera inputs
