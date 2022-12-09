@@ -16,10 +16,10 @@ if __name__ == '__main__':
 
     pipeline = AprilTagPipeline(data_queue, stream_queue)
     source = CameraSource('lifecamA_480p', pipeline)
+    source.start()
 
     # Configure april tag pipeline (TODO read from REQ config file)
     # TODO pipeline.setDetectionParams(...)
-    pipeline.apriltag_pipe.set_camera_params(source.params.get_params_april())
 
     while True:
         # TODO: processing nanos, fps pipeline output

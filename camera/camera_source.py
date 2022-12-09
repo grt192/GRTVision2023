@@ -30,6 +30,7 @@ class CameraSource(Process):
                 self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
 
             _, self.frame = self.cap.read()
+            print(type(self.frame))
 
             # CALIBRATE IMAGE PIPE
 
