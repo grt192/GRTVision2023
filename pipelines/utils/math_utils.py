@@ -2,7 +2,7 @@
 
 import math
 
-def matrixToQuat(m):
+def matrix_to_quat(m):
     r11 = m[0][0]; r12 = m[0][1]; r13 = m[0][2]
     r21 = m[1][0]; r22 = m[1][1]; r23 = m[1][2]
     r31 = m[2][0]; r32 = m[2][1]; r33 = m[2][2]
@@ -31,12 +31,14 @@ def matrixToQuat(m):
 
     return (q0, q1, q2, q3)
 
-def invertQuat(q):
-    return (q[0], -q[1], -q[2], -q[3])
 
-def quatToAxisAngle(q):
+def invert_quat(q):
+    return q[0], -q[1], -q[2], -q[3]
+
+
+def quat_to_axis_angle(q):
     if q[0] == 1:
-        return (0, (1, 0, 0))
+        return 0, (1, 0, 0)
 
     theta = 2 * math.acos(q[0])
 
@@ -45,11 +47,12 @@ def quatToAxisAngle(q):
     y = q[2] / s
     z = q[3] / s
 
-    return (theta, (x, y, z))
+    return theta, (x, y, z)
 
-def quatToFLU(q):
+
+def quat_to_flu(q):
     x, y, z, w = q
-    
+
     forward = (
         2 * (x * z + w * y),
         2 * (y * z - w * x),
@@ -68,4 +71,4 @@ def quatToFLU(q):
         2 * (y * z + w * x)
     )
 
-    return (forward, left, up)
+    return forward, left, up

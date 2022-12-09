@@ -1,19 +1,17 @@
 from pupil_apriltags import Detector
 
-# lower resolution tag family Tag16h5 
-# teams should be able to detect the tags from further away for a given resolution and use a little less CPU doing so (or process at a higher frame rate)
-# trade-off is an increase in false detections, mitigated by using an appropriate minimum size and more aggressively rejecting tags with bit errors 
+
+# lower resolution tag family Tag16h5 teams should be able to detect the tags from further away for a given
+# resolution and use a little less CPU doing so (or process at a higher frame rate) trade-off is an increase in false
+# detections, mitigated by using an appropriate minimum size and more aggressively rejecting tags with bit errors
 # https://www.chiefdelphi.com/t/frc-blog-2023-approved-devices-rules-preview-and-vision-target-update/417253
 
 # tag PDF source: https://github.com/TylerSeiford/apriltag-pdfs
 
 class AprilTagPipe:
-
-
     def __init__(self):
-        
         # Default detection params
-        self.TAG_SIZE = 0.200 # in meters
+        self.TAG_SIZE = 0.200  # in meters
 
         self.TAG_FAMILY = 'tag16h5'
         self.N_THREADS = 1
@@ -32,21 +30,24 @@ class AprilTagPipe:
             decode_sharpening=self.DECODE_SHARPENING,
             debug=self.DEBUG,
         )
-        
+
         # Default camera params [fx, fy, cx, cy]  
         self.CAMERA_PARAMS = (0, 0, 0, 0)
 
-    
     # Receives gray image, returns detections
     def process(self, image):
         # Run tag detection
-        detections = self.detector.detect(image, estimate_tag_pose=True, camera_params=self.CAMERA_PARAMS, tag_size=self.TAG_SIZE)
+        detections = self.detector.detect(
+            image,
+            estimate_tag_pose=True,
+            camera_params=self.CAMERA_PARAMS,
+            tag_size=self.TAG_SIZE
+        )
 
         return detections
 
-
     # Re-initializes detector with parameters as defined by class variables
-    def updateDetector(self):
+    def update_detector(self):
         self.detector = Detector(
             families=self.TAG_FAMILY,
             nthreads=self.N_THREADS,
@@ -57,8 +58,8 @@ class AprilTagPipe:
             debug=self.DEBUG,
         )
 
-
-    def setDetectionParams(self, tag_size, tag_family, n_threads, decimate, sigma_blur, refine_edges, decode_sharpening, debug):
+    def set_detection_params(self, tag_size, tag_family, n_threads, decimate, sigma_blur, refine_edges,
+                             decode_sharpening, debug):
         self.TAG_SIZE = tag_size
 
         self.TAG_FAMILY = tag_family
@@ -69,7 +70,7 @@ class AprilTagPipe:
         self.DECODE_SHARPENING = decode_sharpening
         self.DEBUG = debug
 
-        updateDetector()
+        self.update_detector()
 
-    def setCameraParams(self, params):
-        self.CAMERA_PARAMS = params 
+    def set_camera_params(self, params):
+        self.CAMERA_PARAMS = params

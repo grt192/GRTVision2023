@@ -11,11 +11,11 @@ if __name__ == '__main__':
     stream_queue = SimpleQueue()
 
     sources = [
-        CameraSource(0, 0, 0, 1, 0, 0, 0)  # Turret camera
+        CameraSource("...")  # Turret camera
     ]
 
-    green_pipeline = GreenLightPipeline()
-    april_pipeline = AprilTagPipeline()
+    green_pipeline = GreenLightPipeline(data_queue, stream_queue)
+    april_pipeline = AprilTagPipeline(data_queue, stream_queue)
 
     # localizer = Localization()
 
@@ -25,5 +25,5 @@ if __name__ == '__main__':
     while True:
         for source in sources:
             frame = source.get_frame()
-            green_pipeline.get(frame)
-            april_pipeline.run(frame)
+            green_pipeline.process(frame)
+            april_pipeline.process(frame)

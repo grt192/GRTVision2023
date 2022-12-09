@@ -1,7 +1,7 @@
 import cv2
 
-class DrawTagsPipe:    
-    
+
+class DrawTagsPipe:
     def process(self, image, detections):
         output_image = image.copy()
 
@@ -18,15 +18,13 @@ class DrawTagsPipe:
             cv2.line(output_image, ptB, ptC, (0, 255, 0), 2)
             cv2.line(output_image, ptC, ptD, (0, 255, 0), 2)
             cv2.line(output_image, ptD, ptA, (0, 255, 0), 2)
-            
+
             # Draw center of tag
-            (cX, cY) = (int(d.center[0]), int(d.center[1]))
+            cX, cY = (int(d.center[0]), int(d.center[1]))
             cv2.circle(output_image, (cX, cY), 5, (0, 0, 255), -1)
-            
+
             # Draw the tag family on the image
-            cv2.putText(output_image, d.tag_family.decode("utf-8") + 'id' + str(d.tag_id), 
-                (ptA[0], ptA[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            cv2.putText(output_image, d.tag_family.decode("utf-8") + 'id' + str(d.tag_id),
+                        (ptA[0], ptA[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
         return output_image
-
-

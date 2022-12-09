@@ -1,15 +1,9 @@
 import cv2
-from multiprocessing import Process
-
-from apriltag.apriltag_pipe import AprilTagPipe
-from apriltag.draw_tags_pipe import DrawTagsPipe
-from generic_pipelines.grayscale_pipe import GrayscalePipe
-from test_camera_source import TestCameraSource
-from utils.math_utils import matrixToQuat, quatToFLU
+from multiprocessing import SimpleQueue
 
 
 class ExamplePipeline:
-    def __init__(self, data_queue, stream_queue):
+    def __init__(self, data_queue: SimpleQueue, stream_queue: SimpleQueue):
         self.data_queue = data_queue
         self.stream_queue = stream_queue
 
@@ -22,3 +16,5 @@ class ExamplePipeline:
 
         # TODO Run pipes
         # TODO Put data into queues
+        self.data_queue.put('...')
+        self.stream_queue.put('...')

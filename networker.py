@@ -4,7 +4,7 @@ import time
 import zmq
 from multiprocessing import Process, SimpleQueue
 
-LOCAL_DEBUG = True
+LOCAL_DEBUG = False
 SERVER_IP = "tcp://*:5800" if LOCAL_DEBUG else "tcp://10.1.92.94:5800"
 RIO_IDENT = b"RIO"
 

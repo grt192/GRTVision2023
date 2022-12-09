@@ -1,5 +1,5 @@
 # takes in multiple individual local estimates from AprilTags and GreenLight
-# outputs a estimate of robot's global position by comparing input data and data about the field
+# outputs an estimate of robot's global position by comparing input data and data about the field
 
 class Localization:
     def __init__(self):
