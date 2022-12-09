@@ -1,9 +1,12 @@
+# cwd to this script's directory
+cd "$(dirname "$0")"
+
 # update/upgrade all apt packages
-sudo apt-get update 
-sudo apt-get dist-upgrade
+sudo apt-get -y update 
+sudo apt-get -y dist-upgrade
 
 # Install universal tools
-sudo apt-get install python3-pip
+sudo apt-get -y install python3-pip
 
 # setup jetson's ip
 ./setup_ip.sh
