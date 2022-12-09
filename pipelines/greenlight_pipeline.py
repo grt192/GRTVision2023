@@ -13,5 +13,5 @@ class GreenLightPipeline(BasePipeline):
 
         # TODO: init pipes
 
-    def process(self, image):
+    def process(self, image, params):
         return

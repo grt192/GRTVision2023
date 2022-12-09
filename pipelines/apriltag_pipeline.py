@@ -17,7 +17,7 @@ class AprilTagPipeline(BasePipeline):
         self.drawtags_pipe = DrawTagsPipe()
 
     # Output: image, data is tuple of BOOL (data exists or not) and DATA ARRAY
-    def process(self, image):
+    def process(self, image, params):
         if image is None:
             print('Pipeline: Received no image')
             return image, (False, [])

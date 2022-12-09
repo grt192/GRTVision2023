@@ -1,4 +1,5 @@
 from multiprocessing import SimpleQueue
+from camera.camera_params import CameraParams
 
 
 class BasePipeline:
@@ -10,7 +11,7 @@ class BasePipeline:
         self.data_queue = data_queue
         self.stream_queue = stream_queue
 
-    def process(self, image):
+    def process(self, image, params: CameraParams):
         """
         Processes a frame from a `CameraSource`. This method should `put()` data into the `data_queue`
         and `stream_queue` to queue it for broadcast to the correct destination.

@@ -37,6 +37,6 @@ class CameraSource(Process):
 
             # Send frame to pipelines for processing
             for pipeline in self.pipelines:
-                pipeline.process(self.frame)
+                pipeline.process(self.frame, self.params)
 
             time.sleep(1.0 / self.params.fps)
