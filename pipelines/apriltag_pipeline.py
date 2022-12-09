@@ -1,9 +1,9 @@
 from multiprocessing import SimpleQueue
 
 from base_pipeline import BasePipeline
-from pipes.apriltag_pipe import AprilTagPipe
-from pipes.draw_tags_pipe import DrawTagsPipe
-from pipes.grayscale_pipe import GrayscalePipe
+from pipe.apriltag_pipe import AprilTagPipe
+from pipe.draw_tags_pipe import DrawTagsPipe
+from pipe.grayscale_pipe import GrayscalePipe
 from util.math_util import matrix_to_quat, quat_to_flu
 
 
