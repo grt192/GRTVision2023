@@ -2,6 +2,9 @@ import cv2
 
 
 class DrawTagsPipe:
+    """
+    Pipe that labels detected AprilTags in an image with bounding boxes and tag id / family.
+    """
     def process(self, image, detections):
         output_image = image.copy()
 

@@ -10,20 +10,24 @@ if __name__ == '__main__':
     data_queue = SimpleQueue()
     stream_queue = SimpleQueue()
 
-    sources = [
-        CameraSource("...")  # Turret camera
-    ]
-
     green_pipeline = GreenLightPipeline(data_queue, stream_queue)
     april_pipeline = AprilTagPipeline(data_queue, stream_queue)
 
+    sources = [
+        CameraSource(  # Turret camera
+            "...",
+            green_pipeline,
+            april_pipeline
+        )
+    ]
+
     # localizer = Localization()
 
-    networker_process = Process(target=networker, args=(data_queue,), daemon=True)
-    networker_process.start()
+    # networker_process = Process(target=networker, args=(data_queue,), daemon=True)
+    # networker_process.start()
 
-    while True:
-        for source in sources:
-            frame = source.get_frame()
-            green_pipeline.process(frame)
-            april_pipeline.process(frame)
+    # Start `CameraSource` processes
+    for source in sources:
+        source.start()
+
+    networker(data_queue)

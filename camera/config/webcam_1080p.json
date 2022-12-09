@@ -1,6 +1,7 @@
 {
     "path": "0",
     "name": "webcam",
+    "fps": 30,
     "res_width": 1920,
     "res_height": 1080,
     "cam_calib": {

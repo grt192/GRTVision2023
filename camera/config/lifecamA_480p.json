@@ -1,6 +1,7 @@
 {
     "path": 2,
     "name": "lifecamA_480",
+    "fps": 30,
     "res_width": 640,
     "res_height": 480,
     "cam_calib": {

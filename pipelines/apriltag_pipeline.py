@@ -6,17 +6,17 @@ sys.path.append(str(Path(__file__).parent.parent))
 import cv2
 from multiprocessing import SimpleQueue
 
-from apriltag.apriltag_pipe import AprilTagPipe
-from apriltag.draw_tags_pipe import DrawTagsPipe
-from generic_pipes.grayscale_pipe import GrayscalePipe
+from base_pipeline import BasePipeline
+from pipelines.pipes.apriltag_pipe import AprilTagPipe
+from pipelines.pipes.draw_tags_pipe import DrawTagsPipe
+from pipes.grayscale_pipe import GrayscalePipe
 from camera.camera_source import CameraSource
-from utils.math_utils import matrix_to_quat, quat_to_flu
+from util.math_util import matrix_to_quat, quat_to_flu
 
 
-class AprilTagPipeline:
+class AprilTagPipeline(BasePipeline):
     def __init__(self, data_queue: SimpleQueue, stream_queue: SimpleQueue):
-        self.data_queue = data_queue
-        self.stream_queue = stream_queue
+        super().__init__(data_queue, stream_queue)
 
         # Sub-pipelines
         self.grayscale_pipe = GrayscalePipe()
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     stream_queue = SimpleQueue()
 
     pipeline = AprilTagPipeline(data_queue, stream_queue)
-    source = CameraSource('lifecamA_480p')
+    source = CameraSource('lifecamA_480p', pipeline)
 
     # Configure april tag pipeline (TODO read from REQ config file)
     # TODO pipeline.setDetectionParams(...)
@@ -65,7 +65,6 @@ if __name__ == '__main__':
 
     while True:
         # TODO: processing nanos, fps pipeline output
-        pipeline.process(source.get_frame())
         print('pipeline data', data_queue.get())
 
         new_image = stream_queue.get()

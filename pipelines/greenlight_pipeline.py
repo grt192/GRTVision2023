@@ -1,4 +1,5 @@
 from multiprocessing import SimpleQueue
+from base_pipeline import BasePipeline
 
 
 # takes in camera frames
@@ -6,10 +7,11 @@ from multiprocessing import SimpleQueue
 # outputs the relative position estimate of the green target from the camera as a tuple
 # ex: (0, 1.5, 1)
 
-class GreenLightPipeline:
+class GreenLightPipeline(BasePipeline):
     def __init__(self, data_queue: SimpleQueue, stream_queue: SimpleQueue):
-        self.data_queue = data_queue
-        self.stream_queue = stream_queue
+        super().__init__(data_queue, stream_queue)
+
+        # TODO: init pipes
 
     def process(self, image):
         return
