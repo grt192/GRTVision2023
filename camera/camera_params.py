@@ -8,9 +8,7 @@ class CameraParams:
     Config parameters for a `CameraSource`. `filename` should be a path to a camera config JSON file.
     """
     def __init__(self, filename: str):
-        print(str(Path(__file__).parent))
-
-        file = open(str(Path(__file__).parent) + '/config/' + filename + '.json')
+        file = open(str(Path(__file__).parent.parent) + '/config/' + filename + '.json')
         data = json.load(file)
 
         self.path = data['path']

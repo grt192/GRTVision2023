@@ -1,7 +1,7 @@
 import cv2
 import time
 from multiprocessing import Process
-from camera_params import CameraParams
+from camera.camera_params import CameraParams
 from pipelines.base_pipeline import BasePipeline
 
 

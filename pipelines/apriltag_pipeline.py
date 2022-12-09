@@ -1,6 +1,6 @@
 from multiprocessing import SimpleQueue
 
-from base_pipeline import BasePipeline
+from pipelines.base_pipeline import BasePipeline
 from pipe.apriltag_pipe import AprilTagPipe
 from pipe.draw_tags_pipe import DrawTagsPipe
 from pipe.grayscale_pipe import GrayscalePipe
