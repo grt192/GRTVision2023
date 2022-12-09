@@ -1,5 +1,5 @@
 from multiprocessing import SimpleQueue
-from base_pipeline import BasePipeline
+from .base_pipeline import BasePipeline
 
 
 # takes in camera frames
