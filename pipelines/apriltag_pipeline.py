@@ -1,16 +1,9 @@
-import sys
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).parent.parent))
-
-import cv2
 from multiprocessing import SimpleQueue
 
 from base_pipeline import BasePipeline
-from pipelines.pipes.apriltag_pipe import AprilTagPipe
-from pipelines.pipes.draw_tags_pipe import DrawTagsPipe
+from pipes.apriltag_pipe import AprilTagPipe
+from pipes.draw_tags_pipe import DrawTagsPipe
 from pipes.grayscale_pipe import GrayscalePipe
-from camera.camera_source import CameraSource
 from util.math_util import matrix_to_quat, quat_to_flu
 
 
@@ -51,29 +44,3 @@ class AprilTagPipeline(BasePipeline):
         self.data_queue.put(output_data)
         self.stream_queue.put(output_image)
 
-
-if __name__ == '__main__':
-    data_queue = SimpleQueue()
-    stream_queue = SimpleQueue()
-
-    pipeline = AprilTagPipeline(data_queue, stream_queue)
-    source = CameraSource('lifecamA_480p', pipeline)
-
-    # Configure april tag pipeline (TODO read from REQ config file)
-    # TODO pipeline.setDetectionParams(...)
-    pipeline.apriltag_pipe.set_camera_params(source.params.get_params_april())
-
-    while True:
-        # TODO: processing nanos, fps pipeline output
-        print('pipeline data', data_queue.get())
-
-        new_image = stream_queue.get()
-        if new_image is not None:
-            cv2.imshow('April Tag Output', new_image)
-
-        # Terminate program on keystroke
-        if cv2.waitKey(10) & 0xFF == ord('q'):
-            print('Terminating...')
-            break
-
-    cv2.destroyAllWindows()

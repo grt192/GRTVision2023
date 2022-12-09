@@ -10,7 +10,7 @@ from pupil_apriltags import Detector
 
 class AprilTagPipe:
     def __init__(self):
-        # Default detection params
+        # Default detection camera
         self.TAG_SIZE = 0.200  # in meters
 
         self.TAG_FAMILY = 'tag16h5'
@@ -31,7 +31,7 @@ class AprilTagPipe:
             debug=self.DEBUG,
         )
 
-        # Default camera params [fx, fy, cx, cy]  
+        # Default camera camera [fx, fy, cx, cy]
         self.CAMERA_PARAMS = (0, 0, 0, 0)
 
     # Receives gray image, returns detections
