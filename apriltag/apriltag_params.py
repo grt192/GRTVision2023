@@ -8,7 +8,7 @@ class AprilTagParams:
     def __init__(self, filename):
         print(str(Path(__file__).parent))
 
-        file = open(str(Path(__file__).parent) + '/config/' + filename + '.json')
+        file = open(str(Path(__file__).parent.parent) + '/config/' + filename + '.json')
         data = json.load(file)
 
         self.tag_size = data['tag_size']

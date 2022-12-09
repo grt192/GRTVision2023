@@ -1,9 +1,10 @@
 from multiprocessing import SimpleQueue
 
+from apriltag.apriltag_params import AprilTagParams
 from pipelines.base_pipeline import BasePipeline
-from pipe.apriltag_pipe import AprilTagPipe
-from pipe.draw_tags_pipe import DrawTagsPipe
-from pipe.grayscale_pipe import GrayscalePipe
+from pipelines.apriltag_pipe import apriltag_pipe
+from pipelines.draw_tags_pipe import draw_tags_pipe
+from pipelines.grayscale_pipe import grayscale_pipe
 from util.math_util import matrix_to_quat, quat_to_flu
 
 
@@ -11,25 +12,19 @@ class AprilTagPipeline(BasePipeline):
     def __init__(self, data_queue: SimpleQueue, stream_queue: SimpleQueue):
         super().__init__(data_queue, stream_queue)
 
-        # Sub-pipelines
-        self.grayscale_pipe = GrayscalePipe()
-        self.apriltag_pipe = AprilTagPipe()
-        self.drawtags_pipe = DrawTagsPipe()
-
-    # Output: image, data is tuple of BOOL (data exists or not) and DATA ARRAY
     def process(self, image, params):
         if image is None:
             print('Pipeline: Received no image')
             return image, (False, [])
 
         # GRAYSCALE PIPE
-        gray_image = self.grayscale_pipe.process(image)
+        gray_image = grayscale_pipe(image)
 
         # Run tag detection
-        detections = self.apriltag_pipe.process(gray_image)
+        detections = apriltag_pipe(gray_image, AprilTagParams('tag16h5'), params.get_params_april())
 
         # DRAW TAGS PIPE
-        output_image = self.drawtags_pipe.process(gray_image, detections)
+        output_image = draw_tags_pipe(gray_image, detections)
 
         if len(detections) == 0:
             output_data = (False, [])
