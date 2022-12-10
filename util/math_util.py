@@ -1,8 +1,17 @@
 # https://github.com/SouthwestRoboticsProgramming/TagTracker/blob/master/src/quaternions.py
 
 import math
+from typing import Tuple
 
-def matrix_to_quat(m):
+Quaternion = Tuple[float, float, float, float]
+
+
+def matrix_to_quat(m) -> Quaternion:
+    """
+    Converts a 3x3 rotation matrix to a quaternion.
+    :param m: The 3x3 rotation matrix.
+    :return: The quaternion, as a tuple of [x, y, z, w].
+    """
     r11 = m[0][0]; r12 = m[0][1]; r13 = m[0][2]
     r21 = m[1][0]; r22 = m[1][1]; r23 = m[1][2]
     r31 = m[2][0]; r32 = m[2][1]; r33 = m[2][2]
@@ -29,46 +38,13 @@ def matrix_to_quat(m):
         q1 = (r13 + r31) / (4 * q3)
         q2 = (r23 + r32) / (4 * q3)
 
-    return (q0, q1, q2, q3)
+    return q0, q1, q2, q3
 
 
-def invert_quat(q):
+def invert_quat(q: Quaternion) -> Quaternion:
+    """
+    Inverts a quaternion.
+    :param q: The quaternion to invert, as a tuple of [x, y, z, w].
+    :return: The inverted quaternion.
+    """
     return q[0], -q[1], -q[2], -q[3]
-
-
-def quat_to_axis_angle(q):
-    if q[0] == 1:
-        return 0, (1, 0, 0)
-
-    theta = 2 * math.acos(q[0])
-
-    s = math.sin(theta / 2)
-    x = q[1] / s
-    y = q[2] / s
-    z = q[3] / s
-
-    return theta, (x, y, z)
-
-
-def quat_to_flu(q):
-    x, y, z, w = q
-
-    forward = (
-        2 * (x * z + w * y),
-        2 * (y * z - w * x),
-        1 - 2 * (x * x + y * y)
-    )
-
-    left = (
-        1 - 2 * (y * y + z * z),
-        2 * (x * y + w * z),
-        2 * (x * z - w * y)
-    )
-
-    up = (
-        2 * (x * y - w * z),
-        1 - 2 * (x * x + z * z),
-        2 * (y * z + w * x)
-    )
-
-    return forward, left, up

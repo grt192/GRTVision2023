@@ -38,4 +38,3 @@ class AprilTagPipeline(BasePipeline):
 
         self.data_queue.put(output_data)
         self.stream_queue.put(output_image)
-

@@ -2,7 +2,6 @@ from multiprocessing import Process, SimpleQueue
 from networker import networker
 from pipelines.apriltag_pipeline import AprilTagPipeline
 from pipelines.greenlight_pipeline import GreenLightPipeline
-from localization import Localization
 from camera.camera_source import CameraSource
 
 
@@ -20,8 +19,6 @@ if __name__ == '__main__':
             april_pipeline
         )
     ]
-
-    # localizer = Localization()
 
     # networker_process = Process(target=networker, args=(data_queue,), daemon=True)
     # networker_process.start()
