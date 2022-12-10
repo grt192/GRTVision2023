@@ -3,6 +3,7 @@
 import math
 from typing import Tuple
 
+Translation = Tuple[float, float, float]
 Quaternion = Tuple[float, float, float, float]
 
 
