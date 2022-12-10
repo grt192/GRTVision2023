@@ -1,5 +1,5 @@
 from multiprocessing import SimpleQueue
-from .base_pipeline import BasePipeline
+from pipelines.base_pipeline import BasePipeline
 
 
 # takes in camera frames
@@ -13,5 +13,5 @@ class GreenLightPipeline(BasePipeline):
 
         # TODO: init pipes
 
-    def process(self, image, params):
+    def process(self, image, params, ts):
         return

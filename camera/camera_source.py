@@ -30,7 +30,7 @@ class CameraSource(Process):
                 self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
 
             _, self.frame = self.cap.read()
-            print(type(self.frame))
+            ts = int(time.time() * 1000)  # Current time in ms
 
             # CALIBRATE IMAGE PIPE
 
@@ -38,6 +38,6 @@ class CameraSource(Process):
 
             # Send frame to pipelines for processing
             for pipeline in self.pipelines:
-                pipeline.process(self.frame, self.params)
+                pipeline.process(self.frame, self.params, ts)
 
             time.sleep(1.0 / self.params.fps)
