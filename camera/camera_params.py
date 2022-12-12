@@ -12,7 +12,7 @@ class CameraParams:
         data = json.load(file)
 
         self.path = data['path']
-        self.name = data['name']
+        self.cid = data['cid']
         self.res_width = data['res_width']
         self.res_height = data['res_height']
         self.fps = data['fps']
@@ -29,7 +29,7 @@ class CameraParams:
         self.FOV_horz = self.FOV * self.res_width / hypot_pixels
         self.FOV_vert = self.FOV * self.res_height / hypot_pixels
 
-        print("Read camera config for", self.name, "at", self.path)
+        print("Read camera config for", self.cid, "at", self.path)
         print(data)
 
     # Return (fx, fy, cx, cy) 

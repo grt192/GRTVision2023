@@ -1,6 +1,6 @@
 {
-    "path": "0",
-    "name": "webcam",
+    "path": 0,
+    "cid": 1,
     "fps": 30,
     "res_width": 1920,
     "res_height": 1080,

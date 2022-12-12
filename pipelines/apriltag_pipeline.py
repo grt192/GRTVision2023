@@ -33,7 +33,7 @@ class AprilTagPipeline(BasePipeline):
                     translation=(d.pose_t[0][0], d.pose_t[1][0], d.pose_t[2][0]),  # unpack tvec array
                     rotation=matrix_to_quat(d.pose_R),
                     ts=ts,
-                    cid=1,  # TODO: camera id in `CameraParams`
+                    cid=params.cid,
                     tid=d.tag_id
                 )
                 self.data_queue.put(output_data)
