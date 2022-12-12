@@ -13,8 +13,8 @@ if __name__ == '__main__':
         print('what?')
         quit()
 
-    width  = cap.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)   # float `width`
-    height = cap.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)  # float `height`
+    width  = cap.get(cv2.CAP_PROP_FRAME_WIDTH)   # float `width`
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)  # float `height`
 
     gstream = "appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! rtph264pay ! udpsink port=5000"
 
