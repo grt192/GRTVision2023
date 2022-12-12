@@ -7,7 +7,7 @@ import cv2
 # print(cv2.getBuildInformation())
 
 if __name__ == '__main__':
-    cap = cv2.VideoCapture(0, )
+    cap = cv2.VideoCapture(0)
 
     if cap.isOpened() is not True:
         print('what?')
@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     gstream = "appsrc ! videoconvert ! x264enc tune=zerolatency bitrate=500 speed-preset=superfast ! rtph264pay ! udpsink port=5000"
 
-    out = cv2.VideoWriter(gstream, 0, 30, (width, height), True)
+    out = cv2.VideoWriter(gstream, 0, 30.0, (int(width), int(height)))
 
     while True:
         _, frame = cap.read()
