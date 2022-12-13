@@ -17,35 +17,41 @@ def matrix_to_quat(m) -> Quaternion:
     r21 = m[1][0]; r22 = m[1][1]; r23 = m[1][2]
     r31 = m[2][0]; r32 = m[2][1]; r33 = m[2][2]
 
-    q0 = math.sqrt((1 - r11 - r22 + r33) / 4)
-    q1 = math.sqrt((1 + r11 + r22 + r33) / 4)
-    q2 = math.sqrt((1 + r11 - r22 - r33) / 4)
-    q3 = math.sqrt((1 - r11 + r22 - r33) / 4)
+    trace = r11 + r22 + r33
+    if trace > 0:
+        s = 0.5 / math.sqrt(trace + 1.0)
+        w = 0.25 / s
+        x = (r32 - r23) * s
+        y = (r13 - r31) * s
+        z = (r21 - r12) * s
+    else:
+        if r11 > r22 and r11 > r33:
+            s = 2.0 * math.sqrt(1.0 + r11 - r22 - r33)
+            w = (r32 - r23) / s
+            x = 0.25 * s
+            y = (r12 + r21) / s
+            z = (r13 + r31) / s
+        elif r22 > r33:
+            s = 2.0 * math.sqrt(1.0 + r22 - r11 - r33)
+            w = (r13 - r31) / s
+            x = (r12 + r21) / s
+            y = 0.25 * s
+            z = (r23 + r32) / s
+        else:
+            s = 2.0 * math.sqrt(1.0 + r33 - r11 - r22)
+            w = (r21 - r12) / s
+            x = (r13 + r31) / s
+            y = (r23 + r32) / s
+            z = 0.25 * s
 
-    if q1 > q2 and q1 > q3 and q1 > q0:
-        q2 = (r32 - r23) / (4 * q1)
-        q3 = (r13 - r31) / (4 * q1)
-        q0 = (r21 - r12) / (4 * q1)
-    elif q2 > q1 and q2 > q3 and q2 > q0:
-        q1 = (r32 - r23) / (4 * q2)
-        q3 = (r12 + r21) / (4 * q2)
-        q0 = (r13 + r31) / (4 * q2)
-    elif q3 > q1 and q3 > q2 and q3 > q0:
-        q1 = (r13 - r31) / (4 * q3)
-        q2 = (r12 + r21) / (4 * q3)
-        q0 = (r23 + r32) / (4 * q3)
-    elif q0 > q1 and q0 > q2 and q0 > q3:
-        q1 = (r21 - r12) / (4 * q0)
-        q2 = (r13 + r31) / (4 * q0)
-        q3 = (r23 + r32) / (4 * q0)
-
-    return q0, q1, q2, q3
+    return w, x, y, z
 
 
-def invert_quat(q: Quaternion) -> Quaternion:
-    """
-    Inverts a quaternion.
-    :param q: The quaternion to invert, as a tuple of [w, x, y, z].
-    :return: The inverted quaternion.
-    """
-    return -q[0], q[1], -q[2], -q[3]
+if __name__ == "__main__":
+    rot = (
+        (0.6112, -0.7903, 0.0429),
+        (0.6788, 0.5515, 0.4846),
+        (-0.4068, -0.2671, 0.8736)
+    )
+
+    print(matrix_to_quat(rot))
