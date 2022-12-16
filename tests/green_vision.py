@@ -93,7 +93,9 @@ while True:
             cv.drawContours(contour_img, contours, -1, color = (255, 255, 255), thickness = 1 )
             #print(rects)
         largerect = cv.minAreaRect(largest)
-        print (4 * 630 / largerect[1][0])
+        # print(largerect[1][0])
+        if(largerect[1][0] != 0):
+            print (4 * 630 / largerect[1][0])
     
     #draw rectangles
     cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
