@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import math
 
 
 def nothing(x):
@@ -35,6 +36,8 @@ cv.setTrackbarPos('low_S', 'Saturation', 80)
 # set trackbar number for value max and mins
 cv.setTrackbarPos('high_V', 'Value', 255)
 cv.setTrackbarPos('low_V', 'Value', 80)
+
+camangle = 0
 
 #capture video
 capture = cv.VideoCapture(1)
@@ -93,9 +96,23 @@ while True:
             cv.drawContours(contour_img, contours, -1, color = (255, 255, 255), thickness = 1 )
             #print(rects)
         largerect = cv.minAreaRect(largest)
-        # print(largerect[1][0])
-        if(largerect[1][0] != 0):
-            print (4 * 630 / largerect[1][0])
+        small = largerect[1][1]
+        large = largerect[1][0]
+
+        if(largerect[1][0] < small):
+            small = largerect[1][0]
+            large = largerect[1][1]
+        # print((small))
+        #get ratio of sides, print
+        if(small != 0):
+            ratio = (large/small)
+            if(ratio < 1.88):
+                # print(ratio)
+                print (str(math.acos(ratio/1.88) * 180 / (math.pi)) + " " + str(2.125 * 700 *math.cos(camangle) / small))
+
+        # print((largerect[1][1] * 24) / 2.06)
+        # if(largerect[1][1] != 0):
+        #     print (2.06 * 700 / small)
     
     #draw rectangles
     cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
