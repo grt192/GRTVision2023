@@ -9,14 +9,15 @@ if __name__ == '__main__':
     data_queue = SimpleQueue()
     stream_queue = SimpleQueue()
 
-    green_pipeline = GreenLightPipeline(data_queue, stream_queue)
-    april_pipeline = AprilTagPipeline(data_queue, stream_queue)
-
     sources = [
-        CameraSource(  # Turret camera
+        CameraSource(  # Camera A
             "...",
-            green_pipeline,
-            april_pipeline
+            GreenLightPipeline(data_queue, stream_queue),
+            AprilTagPipeline(data_queue, stream_queue)
+        ),
+        CameraSource(  # Camera B
+            "...",
+            AprilTagPipeline(data_queue, stream_queue)
         )
     ]
 

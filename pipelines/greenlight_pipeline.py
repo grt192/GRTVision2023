@@ -1,4 +1,3 @@
-from multiprocessing import SimpleQueue
 from pipelines.base_pipeline import BasePipeline
 
 
@@ -8,10 +7,5 @@ from pipelines.base_pipeline import BasePipeline
 # ex: (0, 1.5, 1)
 
 class GreenLightPipeline(BasePipeline):
-    def __init__(self, data_queue: SimpleQueue, stream_queue: SimpleQueue):
-        super().__init__(data_queue, stream_queue)
-
-        # TODO: init pipes
-
     def process(self, image, params, ts):
         return
