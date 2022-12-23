@@ -2,7 +2,7 @@ import os
 import socket
 import asyncio, websockets
 import threading, time
-from flask import Flask, send_file
+from flask import Flask, send_file, send_from_directory
 
 curr_dir = os.path.dirname(os.path.abspath(__file__))
 CONNECTIONS = set()
@@ -36,11 +36,11 @@ if __name__ == '__main__':
 
     @app.route("/")
     def hello_world():
-        return send_file("test.html")
+        return send_file("cleanothertest.html")
 
-    @app.route("/jmuxer.min.js")
-    def jmuxer():
-        return send_file("jmuxer.min.js")
+    @app.route("/<path:path>")
+    def jmuxer(path):
+        return send_from_directory('', path)
 
     flask_thread = threading.Thread(target=lambda: app.run(port=50000, debug=False, threaded=True))
     flask_thread.daemon = True
@@ -52,6 +52,7 @@ if __name__ == '__main__':
     # asyncio.run(websockmain())
 
     while True:
-        data, addr = sock.recvfrom(99999)
-        # print(data)
-        websockets.broadcast(CONNECTIONS, data)
+        # data, addr = sock.recvfrom(99999)
+        # websockets.broadcast(CONNECTIONS, data)
+        websockets.broadcast(CONNECTIONS, str(int(time.time() * 1000)));
+        time.sleep(1)
