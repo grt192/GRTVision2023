@@ -4,11 +4,10 @@ from pipelines.apriltag_pipe import apriltag_pipe
 from pipelines.draw_tags_pipe import draw_tags_pipe
 from pipelines.grayscale_pipe import grayscale_pipe
 from util.math_util import matrix_to_quat
-from logger import logger
 
 
 class AprilTagPipeline(BasePipeline):
-    def process(self, image, params, ts):
+    def process(self, image, params, logger, ts):
         if image is None:
             logger.warning('Received no image')
             return

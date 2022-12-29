@@ -1,9 +1,9 @@
 import cv2
 import time
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 from camera.camera_params import CameraParams
 from pipelines.base_pipeline import BasePipeline
-from logger import logger
+from logger import init_process_logging
 
 
 class CameraSource(Process):
@@ -12,7 +12,7 @@ class CameraSource(Process):
     config file (see `CameraParams`), and `pipelines` should be a list of pipelines this `CameraSource` owns
     (i.e. that this `CameraSource` sends frames to).
     """
-    def __init__(self, filename: str, *pipelines: BasePipeline):
+    def __init__(self, filename: str, log_queue: Queue, *pipelines: BasePipeline):
         super().__init__()
 
         # Initialize objects
@@ -21,7 +21,10 @@ class CameraSource(Process):
 
         # READ CONFIG FILE
         self.params = CameraParams(filename)
-        logger.info(f'Started Camera with id {self.params.cid}')
+
+        # TODO: better way of passing around queues?
+        self.logger = init_process_logging(log_queue)
+        self.logger.info(f'Started Camera with id {self.params.cid}')
 
         self.pipelines = pipelines
 
@@ -32,7 +35,7 @@ class CameraSource(Process):
                 self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
 
             _, self.frame = self.cap.read()
-            logger.debug(f'Frame received on CameraSource {self.params.cid}')
+            self.logger.debug(f'Frame received on CameraSource {self.params.cid}')
             ts = int(time.time() * 1000)  # Current time in ms
 
             # CALIBRATE IMAGE PIPE
@@ -41,6 +44,6 @@ class CameraSource(Process):
 
             # Send frame to pipelines for processing
             for pipeline in self.pipelines:
-                pipeline.process(self.frame, self.params, ts)
+                pipeline.process(self.frame, self.params, self.logger, ts)
 
             time.sleep(1.0 / self.params.fps)

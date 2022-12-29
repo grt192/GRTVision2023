@@ -2,6 +2,7 @@ from multiprocessing import SimpleQueue
 from camera.camera_params import CameraParams
 from util.math_util import Translation, Quaternion
 from util.jetson_data import JetsonData
+from logging import Logger
 
 
 class BasePipeline:
@@ -13,12 +14,13 @@ class BasePipeline:
         self.data_queue = data_queue
         self.stream_queue = stream_queue
 
-    def process(self, image, params: CameraParams, ts: int) -> None:
+    def process(self, image, params: CameraParams, logger: Logger, ts: int) -> None:
         """
         Processes a frame from a `CameraSource`. This method should call `_broadcast_data()` with data to send it
         to the RIO.
         :param image: The image frame to process.
         :param params: The camera params of the invoking `CameraSource`.
+        :param logger: The `logging.Logger` to log to.
         :param ts: The timestamp the image frame was captured at.
         """
         raise Exception('Not implemented!')
