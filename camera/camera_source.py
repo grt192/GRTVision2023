@@ -3,6 +3,7 @@ import time
 from multiprocessing import Process
 from camera.camera_params import CameraParams
 from pipelines.base_pipeline import BasePipeline
+from logger import logger
 
 
 class CameraSource(Process):
@@ -20,6 +21,7 @@ class CameraSource(Process):
 
         # READ CONFIG FILE
         self.params = CameraParams(filename)
+        logger.info(f'Started Camera with id {self.params.cid}')
 
         self.pipelines = pipelines
 
@@ -30,6 +32,7 @@ class CameraSource(Process):
                 self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
 
             _, self.frame = self.cap.read()
+            logger.debug(f'Frame received on CameraSource {self.params.cid}')
             ts = int(time.time() * 1000)  # Current time in ms
 
             # CALIBRATE IMAGE PIPE

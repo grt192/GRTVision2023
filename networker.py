@@ -3,6 +3,7 @@ import time
 import zmq
 from multiprocessing import Process, SimpleQueue
 from util.jetson_data import JetsonData
+from logger import logger
 
 LOCAL_DEBUG = False
 SERVER_IP = "tcp://*:5800" if LOCAL_DEBUG else "tcp://10.1.92.94:5800"
@@ -14,14 +15,14 @@ RIO_IDENT = b"RIO"
 def networker(data_queue: SimpleQueue):
     context = zmq.Context()
 
-    print(f"Connecting a PUB server to {SERVER_IP}")
+    logger.info(f"Connecting a PUB server to {SERVER_IP}")
     socket = context.socket(zmq.PUB)
     socket.bind(SERVER_IP)
 
     # While the process is running, wait for messages in the queue and send them.
     while True:
         message = data_queue.get().to_json_str()
-        print(f"Sending data: {message}")
+        logger.debug(f"Sending data: {message}")
         socket.send_string(message)
 
 
