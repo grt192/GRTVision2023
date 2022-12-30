@@ -13,15 +13,18 @@ if __name__ == '__main__':
 
     sources = [
         CameraSource(  # Camera A
-            "...",
-            log_queue,
-            GreenLightPipeline(data_queue, stream_queue),
-            AprilTagPipeline(data_queue, stream_queue)
+            filename="...",
+            data_queue=data_queue,
+            stream_queue=stream_queue,
+            log_queue=log_queue,
+            pipelines=(GreenLightPipeline, AprilTagPipeline)  # TODO: not sure why this gives a type warning but the below doesn't
         ),
         CameraSource(  # Camera B
-            "...",
-            log_queue,
-            AprilTagPipeline(data_queue, stream_queue)
+            filename="...",
+            data_queue=data_queue,
+            stream_queue=stream_queue,
+            log_queue=log_queue,
+            pipelines=(AprilTagPipeline,)
         )
     ]
 

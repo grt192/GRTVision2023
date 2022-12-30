@@ -7,5 +7,5 @@ from pipelines.base_pipeline import BasePipeline
 # ex: (0, 1.5, 1)
 
 class GreenLightPipeline(BasePipeline):
-    def process(self, image, params, logger, ts):
+    def process(self, image, ts):
         return
