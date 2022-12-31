@@ -1,9 +1,10 @@
+from typing import Tuple, Type
 import cv2
 import time
-from multiprocessing import Process
+from multiprocessing import Process, Queue, SimpleQueue
 from camera.camera_params import CameraParams
 from pipelines.base_pipeline import BasePipeline
-from logger import logger
+from logger import init_process_logging
 
 
 class CameraSource(Process):
@@ -12,7 +13,7 @@ class CameraSource(Process):
     config file (see `CameraParams`), and `pipelines` should be a list of pipelines this `CameraSource` owns
     (i.e. that this `CameraSource` sends frames to).
     """
-    def __init__(self, filename: str, *pipelines: BasePipeline):
+    def __init__(self, filename: str, data_queue: SimpleQueue, stream_queue: SimpleQueue, log_queue: Queue, pipelines: Tuple[Type[BasePipeline]]):
         super().__init__()
 
         # Initialize objects
@@ -21,9 +22,13 @@ class CameraSource(Process):
 
         # READ CONFIG FILE
         self.params = CameraParams(filename)
-        logger.info(f'Started Camera with id {self.params.cid}')
 
-        self.pipelines = pipelines
+        # Initialize logging
+        self.logger = init_process_logging(log_queue)
+        self.logger.info(f'Started Camera with id {self.params.cid}')
+
+        # Construct pipelines
+        self.pipelines = [Pipeline(data_queue, stream_queue, self.params, self.logger) for Pipeline in pipelines]
 
     def run(self) -> None:
         while True:
@@ -32,7 +37,7 @@ class CameraSource(Process):
                 self.cap = cv2.VideoCapture(self.params.path)  # , cv2.CAP_V4L)
 
             _, self.frame = self.cap.read()
-            logger.debug(f'Frame received on CameraSource {self.params.cid}')
+            self.logger.debug(f'Frame received on CameraSource {self.params.cid}')
             ts = int(time.time() * 1000)  # Current time in ms
 
             # CALIBRATE IMAGE PIPE
@@ -41,6 +46,6 @@ class CameraSource(Process):
 
             # Send frame to pipelines for processing
             for pipeline in self.pipelines:
-                pipeline.process(self.frame, self.params, ts)
+                pipeline.process(self.frame, ts)
 
             time.sleep(1.0 / self.params.fps)
