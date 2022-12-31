@@ -1,11 +1,12 @@
 import numpy as np
 import cv2 as cv
 import math
-
+import platform
 
 def nothing(x):
     pass
 
+system = platform.platform()
 
 # create trackbar windows
 cv.namedWindow('Hue', cv.WINDOW_NORMAL)
@@ -40,7 +41,10 @@ cv.setTrackbarPos('low_V', 'Value', 80)
 camangle = 0
 
 #capture video
-capture = cv.VideoCapture(1)
+if "Ubuntu" in system:
+    capture = cv.VideoCapture(0, cv.CAP_V4L2)
+else:
+    capture = cv.VideoCapture(1)
 
 # if camera couldn't be opened, exit
 if not capture.isOpened():
@@ -51,9 +55,11 @@ while True:
     rects = []
     #capture vid frame by frame
     ret, frame = capture.read()
-
-    capture.set(cv.CAP_PROP_EXPOSURE, -15)
-
+    if "Ubuntu" in system:
+        capture.set(cv.CAP_PROP_AUTO_EXPOSURE, 1)
+        capture.set(cv.CAP_PROP_EXPOSURE, 10)
+    else:
+        capture.set(cv.CAP_PROP_EXPOSURE, -15)
     contour_img = np.copy(frame)
 
     # if frame is not read correctly, break
