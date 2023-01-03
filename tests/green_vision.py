@@ -52,7 +52,6 @@ if not capture.isOpened():
     exit()
 
 while True:
-    rects = []
     #capture vid frame by frame
     ret, frame = capture.read()
     if "Ubuntu" in system:
@@ -60,6 +59,7 @@ while True:
         capture.set(cv.CAP_PROP_EXPOSURE, 10)
     else:
         capture.set(cv.CAP_PROP_EXPOSURE, -15)
+
     contour_img = np.copy(frame)
 
     # if frame is not read correctly, break
@@ -87,20 +87,24 @@ while True:
 
     if len(contour_list) > 0:
         largest = contour_list[0]
+        height, width, _ = contour_img.shape
+        min_x, min_y = width, height
+        max_x =  max_y = 0
         #find minimum area rectangle
         for contours in contour_list:            
             if cv.contourArea(contours) < 25:
                 continue
             if cv.contourArea(contours) > cv.contourArea(largest):
                 largest = contours
-            rect = cv.minAreaRect(contours)
-            #find 4 corners of rectangle
-            box = cv.boxPoints(rect)
-            #convert to int
-            box = np.int0(box)
-            rects.append(box)
+            #get NON-ROTATING rectangle
+            x, y, w, h = cv.boundingRect(contours)
+            min_x, max_x = min( x, min_x), max(x+w , max_x)
+            min_y, max_y = min( y, min_y), max(y+h, max_y)
             cv.drawContours(contour_img, contours, -1, color = (255, 255, 255), thickness = 1 )
-            #print(rects)
+            cv.rectangle(contour_img,(x,y),(x+w,y+h),(0, 255, 0), 2)
+        #print encompassing rectangle
+        cv.rectangle(contour_img, (min_x, min_y), (max_x, max_y), (255, 0, 0), 2)
+        #this still uses rotatabled rectangle as of now
         largerect = cv.minAreaRect(largest)
         small = largerect[1][1]
         large = largerect[1][0]
@@ -119,10 +123,6 @@ while True:
         # print((largerect[1][1] * 24) / 2.06)
         # if(largerect[1][1] != 0):
         #     print (2.06 * 700 / small)
-    
-    #draw rectangles
-    cv.drawContours(contour_img, rects, -1, color = (0, 0, 255), thickness = 2 )
-    #draw contour
 
     # display frame
     cv.imshow('contour_frame', contour_img)
