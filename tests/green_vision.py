@@ -89,6 +89,7 @@ while True:
         largest = contour_list[0]
         height, width, _ = contour_img.shape
         min_x, min_y = width, height
+        print(min_x)
         max_x =  max_y = 0
         #find minimum area rectangle
         for contours in contour_list:            
@@ -118,7 +119,21 @@ while True:
             ratio = (large/small)
             if(ratio < 1.88):
                 # print(ratio)
-                print (str(math.acos(ratio/1.88) * 180 / (math.pi)) + " " + str(2.125 * 700 *math.cos(camangle) / small))
+
+                frameAngle = ((max_x + min_x) / 2 - 320) / 640 * 57.15 #alpha in figure
+
+                distance = math.acos(ratio/1.88) * 180 / (math.pi) #d in figure
+
+                rotatedAngle =  2.125 * 700 *math.cos(camangle) / small #theta in figure
+
+                relativeRotation = rotatedAngle - frameAngle #phi in figure
+
+                xdist = distance * math.sin(frameAngle / 360 * (2 * math.pi)) * 360 #in degrees
+                ydist = distance * math.cos(frameAngle / 360 * (2 * math.pi)) * 360 #in degrees
+
+                pos = (x, y, 0) #z is ignored since it doesn't change
+                rot = (0, 0, relativeRotation) #x and y rotations are ignored since they don't change
+
 
         # print((largerect[1][1] * 24) / 2.06)
         # if(largerect[1][1] != 0):
